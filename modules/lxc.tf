@@ -74,18 +74,12 @@ resource "proxmox_lxc" "lxc-servers" {
     gw     = local.lxc_resource.network.gw
   }
 
-  lifecycle {
-    ignore_changes = [password]
-  }
 }
 
 resource "azurerm_key_vault_secret" "lxcpassword" {
   name         = local.lxc_resource.hostname
   value        = local.lxc_resource.password
   key_vault_id = "/subscriptions/433a5766-0b1a-475e-aa9b-9556b6dab416/resourceGroups/Lab/providers/Microsoft.KeyVault/vaults/map-Vault-lab"
-  lifecycle {
-    ignore_changes = [value]
-  }
 }
 
 #output "lxc_resource" {
