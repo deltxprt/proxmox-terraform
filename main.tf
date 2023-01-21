@@ -33,7 +33,8 @@ locals {
   #  ansible_public_key = "${harvester_ssh_key.ansible.public_key}"
   #}))
   # virtualmachines = yamldecode(file("virtualmachines.yaml"))
-  lxc = yamldecode(file("lxc.yaml"))
+  lxc_files = fileset(".", "lxc/*.yaml")
+  lxc       = { for file in local.lxc_files : basename(file) => yamldecode(file(file)) }
 }
 
 #resource "proxmox_vm_qemu" "virtualmachines" {
