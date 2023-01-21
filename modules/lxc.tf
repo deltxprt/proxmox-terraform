@@ -84,7 +84,7 @@ resource "azurerm_key_vault_secret" "lxcpassword" {
   value        = local.lxc_resource.password
   key_vault_id = "/subscriptions/433a5766-0b1a-475e-aa9b-9556b6dab416/resourceGroups/Lab/providers/Microsoft.KeyVault/vaults/map-Vault-lab"
   lifecycle {
-    ignore_changes = [password]
+    ignore_changes = [value]
   }
 }
 
