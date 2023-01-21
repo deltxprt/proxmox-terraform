@@ -77,19 +77,12 @@ resource "proxmox_lxc" "lxc-servers" {
   lifecycle {
     ignore_changes = [password]
   }
-  depends_on = [
-    random_password.lxcpassword
-  ]
 }
 
 resource "azurerm_key_vault_secret" "lxcpassword" {
-  name         = format("%s-%s", proxmox_lxc.lxc-servers.vmid, local.lxc_resource.hostname)
+  name         = local.lxc_resource.hostname
   value        = local.lxc_resource.password
   key_vault_id = "/subscriptions/433a5766-0b1a-475e-aa9b-9556b6dab416/resourceGroups/Lab/providers/Microsoft.KeyVault/vaults/map-Vault-lab"
-  depends_on = [
-    proxmox_lxc.lxc-servers,
-    random_password.lxcpassword
-  ]
 }
 
 #output "lxc_resource" {
