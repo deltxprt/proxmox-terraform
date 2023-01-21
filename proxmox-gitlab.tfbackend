@@ -1,8 +1,0 @@
-address = "https://gitlab.com/api/v4/projects/42747604/terraform/state/proxmox-state"
-lock_address=  "https://gitlab.com/api/v4/projects/42747604/terraform/state/proxmox-state/lock"
-unlock_address= "https://gitlab.com/api/v4/projects/42747604/terraform/state/proxmox-state/lock"
-username = "vincewth"
-password = "glpat-5z8pEZ7WeEpQdLcqDVY-"
-lock_method="POST"
-unlock_method="DELETE"
-retry_wait_min=5
