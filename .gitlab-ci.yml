@@ -11,11 +11,9 @@ include:
 
 before_script:
   - | 
-    SOPSVERSION=$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags https://github.com/mozilla/sops.git '*.*.*' | tail --lines=1 | cut --delimiter='/' --fields=3)
-    PACKAGEVERSION=$(echo $SOPSVERSION | sed 's/v//')
-    curl https://github.com/mozilla/sops/releases/download/${SOPSVERSION}/sops_${PACKAGEVERSION}_amd64.deb -o sops_${PACKAGEVERSION}_amd64.deb
-    sudo dpkg -i sops_${PACKAGEVERSION}_amd64.deb
-  - sops --decrypt --in-place proxmox.config.tfbackend
+    - wget https://github.com/mozilla/sops/releases/download/v3.7.3/sops-v3.7.3.linux.amd64 -O /usr/bin/sops
+    - chmod +x /usr/bin/sops
+    - sops --decrypt --in-place proxmox.config.tfbackend
 
 stages:
   - validate
