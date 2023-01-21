@@ -1,7 +1,7 @@
 test:
   hostname: "test"
   description: "lxc test"
-  ostemplate: "local:vztmpl/debian-11-standard_11.3-1_amd64.tar.zst"
+  ostemplate: "local:vztmpl/ubuntu-22.04-standard_22.04-1_amd64.tar.zst"
   unprivileged: true
   cores: 2
   memory: 2048
@@ -20,7 +20,7 @@ test:
 test2:
   hostname: "test2"
   description: "lxc test2"
-  ostemplate: "local:vztmpl/debian-11-standard_11.3-1_amd64.tar.zst"
+  ostemplate: "local:vztmpl/ubuntu-22.04-standard_22.04-1_amd64.tar.zst "
   unprivileged: true
   cores: 2
   memory: 2048
