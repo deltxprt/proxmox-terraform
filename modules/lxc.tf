@@ -77,7 +77,7 @@ resource "proxmox_lxc" "lxc-servers" {
 }
 
 resource "azurerm_key_vault_secret" "lxcpassword" {
-  name         = proxmox_lxc.lxc-servers.id
+  name         = proxmox_lxc.lxc-servers.hostname
   value        = local.lxc_resource.password
   key_vault_id = "/subscriptions/433a5766-0b1a-475e-aa9b-9556b6dab416/resourceGroups/Lab/providers/Microsoft.KeyVault/vaults/map-Vault-lab"
 }
