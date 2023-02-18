@@ -1,7 +1,7 @@
 hostname: "seaweedfs"
 description: "seaweedfs docker"
 ostemplate: "local:vztmpl/alpine-3.17-default_20221129_amd64.tar.xz"
-unprivileged: false
+unprivileged: true
 cores: 2
 memory: 2048
 onboot: true
