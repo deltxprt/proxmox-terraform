@@ -1,7 +1,7 @@
-hostname: "seaweedfs"
-description: "seaweedfs docker"
+hostname: "minio"
+description: "minio on docker"
 ostemplate: "local:vztmpl/alpine-3.17-default_20221129_amd64.tar.xz"
-unprivileged: true
+unprivileged: false
 cores: 2
 memory: 2048
 onboot: true
