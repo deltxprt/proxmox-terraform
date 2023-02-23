@@ -1,6 +1,6 @@
 hostname: "vault"
 description: "vault"
-ostemplate: "local:vztmpl/alpine-3.17-default_20221129_amd64.tar.xz"
+ostemplate: "local:vztmpl/debian-11-standard_11.6-1_amd64.tar.zst"
 unprivileged: true
 cores: 2
 memory: 2048
