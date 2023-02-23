@@ -1,6 +1,6 @@
 hostname: "vault"
 description: "vault"
-ostemplate: "local:vztmpl/debian-11-standard_11.6-1_amd64.tar.zst"
+ostemplate: "local:vztmpl/ubuntu-22.04-standard_22.04-1_amd64.tar.zst"
 unprivileged: true
 cores: 2
 memory: 2048
