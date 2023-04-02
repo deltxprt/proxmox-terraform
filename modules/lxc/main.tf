@@ -76,7 +76,7 @@ resource "proxmox_lxc" "lxc-servers" {
   network {
     name   = "eth0"
     bridge = "vmbr0"
-    ip     = var.ip_addresse
+    ip     = format("%s/24",var.ip_address)
     gw     = "10.0.0.1"
   }
 
@@ -98,13 +98,13 @@ resource "vault_generic_secret" "lxclocalpassword" {
 resource "dns_a_record_set" "lsc_lab" {
   zone      = "lab.markaplay.net."
   name      = var.hostname
-  addresses = var.ip_addresse
+  addresses = var.ip_address
   ttl       = 3600
 }
 
 resource "dns_ptr_record" "lxc_reverse_lab" {
   zone = "0.0.10.in-addr.arpa."
-  name = var.ip_addresse
+  name = var.ip_address
   ptr  = var.hostname
   ttl  = 3600
 }
