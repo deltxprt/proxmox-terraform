@@ -13,6 +13,10 @@ terraform {
       source  = "hashicorp/random"
       version = "3.4.3"
     }
+    vault = {
+      source = "hashicorp/vault"
+      version = "3.14.0"
+    }
   }
 }
 
@@ -35,6 +39,7 @@ locals {
   # virtualmachines = yamldecode(file("virtualmachines.yaml"))
   lxc_files = fileset(".", "lxc/*.yaml")
   lxc       = { for file in local.lxc_files : basename(file) => yamldecode(file(file)) }
+  dns-key      = data.vault_generic_secret.dns-key.data["tsig"]
 }
 
 #resource "proxmox_vm_qemu" "virtualmachines" {
@@ -77,6 +82,7 @@ module "lxc_resource" {
   source   = "./modules"
   for_each = local.lxc
   lxc_data = each.value
+  dns-key  = local.dns-key
 }
 
 #output "test" {

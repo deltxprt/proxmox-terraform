@@ -12,6 +12,10 @@ terraform {
       source  = "hashicorp/random"
       version = "3.4.3"
     }
+    vault = {
+      source = "hashicorp/vault"
+      version = "3.14.0"
+    }
   }
 }
 
@@ -37,6 +41,11 @@ variable "lxc_data" {
       gw     = string
     })
   })
+}
+
+variable "dns-key" {
+  type = string
+  description = "tsig key to update dns"
 }
 
 resource "random_password" "lxcpassword" {
@@ -80,6 +89,13 @@ resource "azurerm_key_vault_secret" "lxcpassword" {
   name         = proxmox_lxc.lxc-servers.hostname
   value        = local.lxc_resource.password
   key_vault_id = "/subscriptions/433a5766-0b1a-475e-aa9b-9556b6dab416/resourceGroups/Lab/providers/Microsoft.KeyVault/vaults/map-Vault-lab"
+}
+
+resource "vault_generic_secret" "lxclocalpassword" {
+    path = "secret/lxc/${proxmox_lxc.lxc-servers.hostname}"
+    data_json = jsonencode({
+        password = local.lxc_resource.password
+    })
 }
 
 #output "lxc_resource" {

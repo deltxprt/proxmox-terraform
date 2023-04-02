@@ -1,0 +1,8 @@
+hostname: "testvm"
+description: "testvm"
+os: "rhel"
+size: "small"
+ip: "10.0.0.112"
+tags:
+  - "testvm"
+  - "test"
