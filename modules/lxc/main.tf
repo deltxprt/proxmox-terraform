@@ -70,7 +70,7 @@ resource "proxmox_lxc" "lxc-servers" {
   // Terraform will crash without rootfs defined
   rootfs {
     storage = "vmpool"
-    size    = locals.lxc_size[var.size].size
+    size    = local.lxc_size[var.size].size
   }
 
   network {

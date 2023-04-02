@@ -13,25 +13,25 @@ terraform {
 locals {
   vm_size = {
     "small" = {
-      socket = 2
+      sockets = 2
       cores  = 1
       memory = 1024
       disk   = "10G"
     }
     "medium" = {
-      socket = 2
+      sockets = 2
       cores  = 2
       memory = 2048
       disk   = "20G"
     }
     "large" = {
-      socket = 2
+      sockets = 2
       cores  = 4
       memory = 4096
       disk   = "40G"
     }
     "xlarge" = {
-      socket = 2
+      sockets = 2
       cores  = 8
       memory = 8192
       disk   = "80G"
@@ -51,7 +51,7 @@ resource "proxmox_vm_qemu" "vm-server" {
   full_clone  = local.operating_system[var.os]
   cpu         = "EPYC-Rome"
   numa        = true
-  socket      = local.vm_size[var.size].socket
+  sockets      = local.vm_size[var.size].sockets
   cores       = local.vm_size[var.size].cores
   memory      = local.vm_size[var.size].memory
   onboot      = true
@@ -63,7 +63,7 @@ resource "proxmox_vm_qemu" "vm-server" {
   disk {
     type    = "virtio"
     storage = "vm-data"
-    ssd     = true
+    ssd     = 1
     size    = local.vm_size[var.size].disk
   }
 
