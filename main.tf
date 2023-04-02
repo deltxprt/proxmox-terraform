@@ -17,6 +17,10 @@ terraform {
       source  = "hashicorp/vault"
       version = "3.14.0"
     }
+    dns = {
+      source  = "hashicorp/dns"
+      version = "3.2.4"
+    }
   }
 }
 
@@ -65,12 +69,28 @@ locals {
   vm        = { for file in local.vm_files : basename(file) => yamldecode(file(file)) }
 }
 
-module "instances_resource" {
-  source   = "./modules"
-  for_each = local.lxc
-  lxc_data = each.value
-  for_each_vm = local.vm
-  vm_data  = each.value
+module "lxc_resource" {
+  source          = "./modules/lxc"
+  for_each        = local.lxc
+  hostname        = each.key.hostname
+  description     = each.key.description
+  template        = each.key.template
+  unprivileged    = each.key.unprivileged
+  size            = each.key.size
+  onboot          = each.key.onboot
+  start           = each.key.start
+  ssh_public_keys = each.key.ssh_public_keys
+  ip_address     = each.key.ip_addresse
+}
+module "vm_resource" {
+  source      = "./modules/vm"
+  for_each    = local.vm
+  hostname    = each.key.hostname
+  description = each.key.description
+  os          = each.key.os
+  size        = each.key.size
+  ip_address = each.key.ip_addresse
+  tags        = each.key.tags
 }
 
 #output "test" {
