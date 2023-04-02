@@ -72,25 +72,25 @@ locals {
 module "lxc_resource" {
   source          = "./modules/lxc"
   for_each        = local.lxc
-  hostname        = each.key.hostname
-  description     = each.key.description
-  template        = each.key.template
-  unprivileged    = each.key.unprivileged
-  size            = each.key.size
-  onboot          = each.key.onboot
-  start           = each.key.start
-  ssh_public_keys = each.key.ssh_public_keys
-  ip_address     = each.key.ip_addresse
+  hostname        = each.value.hostname
+  description     = each.value.description
+  template        = each.value.template
+  unprivileged    = each.value.unprivileged
+  size            = each.value.size
+  onboot          = each.value.onboot
+  start           = each.value.start
+  ssh_public_keys = each.value.ssh_public_keys
+  ip_address      = each.value.ip_addresse
 }
 module "vm_resource" {
   source      = "./modules/vm"
   for_each    = local.vm
-  hostname    = each.key.hostname
-  description = each.key.description
-  os          = each.key.os
-  size        = each.key.size
-  ip_address = each.key.ip_addresse
-  tags        = each.key.tags
+  hostname    = each.value.hostname
+  description = each.value.description
+  os          = each.value.os
+  size        = each.value.size
+  ip_address  = each.value.ip_addresse
+  tags        = each.value.tags
 }
 
 #output "test" {
