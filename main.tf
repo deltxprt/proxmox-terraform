@@ -63,18 +63,13 @@ locals {
   lxc       = { for file in local.lxc_files : basename(file) => yamldecode(file(file)) }
   vm_files  = fileset(".", "vm/*.yaml")
   vm        = { for file in local.vm_files : basename(file) => yamldecode(file(file)) }
-  dns-key   = data.vault_generic_secret.dns-key.data["tsig"]
 }
 
-module "lxc_resource" {
+module "instances_resource" {
   source   = "./modules"
   for_each = local.lxc
   lxc_data = each.value
-}
-
-module "vm_resource" {
-  source   = "./modules"
-  for_each = local.vm
+  for_each_vm = local.vm
   vm_data  = each.value
 }
 
