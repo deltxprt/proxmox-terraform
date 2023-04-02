@@ -61,8 +61,8 @@ resource "proxmox_lxc" "lxc-servers" {
   ostemplate      = var.template
   password        = random_password.lxcpassword.result
   unprivileged    = var.unprivileged
-  cores           = locals.lxc_size[var.size].cores
-  memory          = locals.lxc_size[var.size].memory
+  cores           = local.lxc_size[var.size].cores
+  memory          = local.lxc_size[var.size].memory
   onboot          = var.onboot
   start           = var.start
   ssh_public_keys = var.ssh_public_keys
