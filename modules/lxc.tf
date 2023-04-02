@@ -98,6 +98,15 @@ resource "vault_generic_secret" "lxclocalpassword" {
     })
 }
 
+module "dns" {
+  source = "./modules"
+  dns_data = {
+    name = local.vm_resource.hostname
+    ip   = local.vm_resource.ip
+  }
+  dns-key = var.dns-key
+}
+
 #output "lxc_resource" {
 #  value = var.lxc_data
 #}

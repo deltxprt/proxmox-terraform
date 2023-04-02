@@ -29,59 +29,45 @@ provider "azurerm" {
   }
 }
 
-provider "proxmox" {}
+variable login_approle_role_id {}
+variable login_approle_secret_id {}
 
-locals {
-  #cloudinit = yamldecode(templatefile("cloudinit.yaml", {
-  #  delta_public_key   = "${harvester_ssh_key.delta.public_key}"
-  #  ansible_public_key = "${harvester_ssh_key.ansible.public_key}"
-  #}))
-  # virtualmachines = yamldecode(file("virtualmachines.yaml"))
-  lxc_files = fileset(".", "lxc/*.yaml")
-  lxc       = { for file in local.lxc_files : basename(file) => yamldecode(file(file)) }
-  dns-key      = data.vault_generic_secret.dns-key.data["tsig"]
+provider "vault" {
+  auth_login {
+    path = "auth/approle/login"
+
+    parameters = {
+      role_id   = var.login_approle_role_id
+      secret_id = var.login_approle_secret_id
+    }
+  }
 }
 
-#resource "proxmox_vm_qemu" "virtualmachines" {
-#  for_each             = local.virtualmachines
-#  name                 = each.value.name
-#  namespace            = each.value.namespace
-#  restart_after_update = each.value.restart_after_update
-#  description          = each.value.description
-#  cpu                  = each.value.cpu
-#  memory               = each.value.memory
-#  efi                  = each.value.efi
-#  secure_boot          = each.value.secure_boot
-#  run_strategy         = each.value.run_strategy
-#  hostname             = each.value.hostname
-#  machine_type         = each.value.machine_type
-#  network_interface {
-#    name           = each.value.nic-1.name
-#    network_name   = each.value.nic-1.network_name
-#    wait_for_lease = each.value.nic-1.wait_for_lease
-#  }
-#  disk {
-#    name        = each.value.rootdisk.name
-#    type        = each.value.rootdisk.type
-#    size        = each.value.rootdisk.size
-#    bus         = each.value.rootdisk.bus
-#    boot_order  = each.value.rootdisk.boot_order
-#    image       = each.value.rootdisk.image_name
-#    auto_delete = each.value.rootdisk.auto_delete
-#  }
-#  cloudinit {
-#    user_data    = (each.value.cloud_init == "ubuntu-debian" ? local.cloudinit.ubuntu-debian.UserData : local.cloudinit.rhel.UserData)
-#    network_data = (each.value.cloud_init == "ubuntu-debian" ? local.cloudinit.ubuntu-debian.NetworkData : local.cloudinit.rhel.NetworkData)
-#  }
-#  lifecycle {
-#    ignore_changes = [disk]
-#  }
-#}
+provider "proxmox" {}
+
+data "vault_generic_secret" "dns-key" {
+  path = "/bind-dns/ns1"
+}
+
+locals {
+  lxc_files = fileset(".", "lxc/*.yaml")
+  lxc       = { for file in local.lxc_files : basename(file) => yamldecode(file(file)) }
+  vm_files  = fileset(".", "vm/*.yaml")
+    vm      = { for file in local.vm_files : basename(file) => yamldecode(file(file)) }
+  dns-key   = data.vault_generic_secret.dns-key.data["tsig"]
+}
 
 module "lxc_resource" {
   source   = "./modules"
   for_each = local.lxc
   lxc_data = each.value
+  dns-key  = local.dns-key
+}
+
+module "vm_resource" {
+  source   = "./modules"
+  for_each = local.vm
+  vm_data  = each.value
   dns-key  = local.dns-key
 }
 
