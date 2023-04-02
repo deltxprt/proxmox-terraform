@@ -13,7 +13,7 @@ terraform {
       version = "3.4.3"
     }
     vault = {
-      source = "hashicorp/vault"
+      source  = "hashicorp/vault"
       version = "3.14.0"
     }
   }
@@ -44,7 +44,7 @@ variable "lxc_data" {
 }
 
 variable "dns-key" {
-  type = string
+  type        = string
   description = "tsig key to update dns"
 }
 
@@ -92,19 +92,24 @@ resource "azurerm_key_vault_secret" "lxcpassword" {
 }
 
 resource "vault_generic_secret" "lxclocalpassword" {
-    path = "secret/lxc/${proxmox_lxc.lxc-servers.hostname}"
-    data_json = jsonencode({
-        password = local.lxc_resource.password
-    })
+  path = "secret/lxc/${proxmox_lxc.lxc-servers.hostname}"
+  data_json = jsonencode({
+    password = local.lxc_resource.password
+  })
 }
 
-module "dns" {
-  source = "./modules"
-  dns_data = {
-    name = local.vm_resource.hostname
-    ip   = local.vm_resource.ip
-  }
-  dns-key = var.dns-key
+resource "dns_a_record_set" "lab" {
+  zone      = "lab.markaplay.net."
+  name      = local.dns_data.hostname
+  addresses = local.dns_data.ip
+  ttl       = 3600
+}
+
+resource "dns_ptr_record" "reverse_lab" {
+  zone = "0.0.10.in-addr.arpa."
+  name = local.dns_data.ip
+  ptr  = local.dns_data.hostname
+  ttl  = 3600
 }
 
 #output "lxc_resource" {

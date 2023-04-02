@@ -14,7 +14,7 @@ terraform {
       version = "3.4.3"
     }
     vault = {
-      source = "hashicorp/vault"
+      source  = "hashicorp/vault"
       version = "3.14.0"
     }
   }
@@ -29,8 +29,8 @@ provider "azurerm" {
   }
 }
 
-variable login_approle_role_id {}
-variable login_approle_secret_id {}
+variable "login_approle_role_id" {}
+variable "login_approle_secret_id" {}
 
 provider "vault" {
   auth_login {
@@ -43,17 +43,26 @@ provider "vault" {
   }
 }
 
-provider "proxmox" {}
-
 data "vault_generic_secret" "dns-key" {
   path = "/bind-dns/ns1"
 }
+
+provider "dns" {
+  update {
+    server        = "10.0.0.111"
+    key_name      = "terraform-key."
+    key_algorithm = "hmac-sha256"
+    key_secret    = ${data.vault_generic_secret.dns-key.data["tsig"]}
+  }
+}
+
+provider "proxmox" {}
 
 locals {
   lxc_files = fileset(".", "lxc/*.yaml")
   lxc       = { for file in local.lxc_files : basename(file) => yamldecode(file(file)) }
   vm_files  = fileset(".", "vm/*.yaml")
-    vm      = { for file in local.vm_files : basename(file) => yamldecode(file(file)) }
+  vm        = { for file in local.vm_files : basename(file) => yamldecode(file(file)) }
   dns-key   = data.vault_generic_secret.dns-key.data["tsig"]
 }
 
@@ -61,14 +70,12 @@ module "lxc_resource" {
   source   = "./modules"
   for_each = local.lxc
   lxc_data = each.value
-  dns-key  = local.dns-key
 }
 
 module "vm_resource" {
   source   = "./modules"
   for_each = local.vm
   vm_data  = each.value
-  dns-key  = local.dns-key
 }
 
 #output "test" {
