@@ -43,11 +43,6 @@ variable "lxc_data" {
   })
 }
 
-variable "dns-key" {
-  type        = string
-  description = "tsig key to update dns"
-}
-
 resource "random_password" "lxcpassword" {
   length  = 25
   special = true
@@ -98,17 +93,17 @@ resource "vault_generic_secret" "lxclocalpassword" {
   })
 }
 
-resource "dns_a_record_set" "lab" {
+resource "dns_a_record_set" "lsc_lab" {
   zone      = "lab.markaplay.net."
-  name      = local.dns_data.hostname
-  addresses = local.dns_data.ip
+  name      = local.lxc_data.hostname
+  addresses = local.lxc_data.ip
   ttl       = 3600
 }
 
-resource "dns_ptr_record" "reverse_lab" {
+resource "dns_ptr_record" "lxc_reverse_lab" {
   zone = "0.0.10.in-addr.arpa."
-  name = local.dns_data.ip
-  ptr  = local.dns_data.hostname
+  name = local.lxc_data.ip
+  ptr  = local.lxc_data.hostname
   ttl  = 3600
 }
 
