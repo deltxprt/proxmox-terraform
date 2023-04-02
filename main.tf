@@ -33,16 +33,16 @@ provider "azurerm" {
   }
 }
 
-variable "login_approle_role_id" {}
-variable "login_approle_secret_id" {}
+variable "roleid" {}
+variable "secretid" {}
 
 provider "vault" {
   auth_login {
     path = "auth/approle/login"
 
     parameters = {
-      role_id   = var.login_approle_role_id
-      secret_id = var.login_approle_secret_id
+      role_id   = var.roleid
+      secret_id = var.secretid
     }
   }
 }
@@ -80,7 +80,7 @@ module "lxc_resource" {
   onboot          = each.value.onboot
   start           = each.value.start
   ssh_public_keys = each.value.ssh_public_keys
-  ip_address      = each.value.ip_addresse
+  ip_address      = each.value.ip_address
 }
 module "vm_resource" {
   source      = "./modules/vm"
@@ -89,7 +89,7 @@ module "vm_resource" {
   description = each.value.description
   os          = each.value.os
   size        = each.value.size
-  ip_address  = each.value.ip_addresse
+  ip_address  = each.value.ip_address
   tags        = each.value.tags
 }
 
