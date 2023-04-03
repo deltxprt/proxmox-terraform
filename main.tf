@@ -51,10 +51,10 @@ provider "vault" {
 provider "dns" {
   update {
     server        = "10.0.0.100"
-    key_name      = "terraform."
+    key_name      = "terraform-key."
     key_algorithm = "hmac-sha256"
     transport     = "tcp"
-    key_secret    = "5tSSOdk7JBmwCw0LktF/pVkmk3uoRUbEBU4JPMDJrWs="
+    key_secret    = "cQ5H8avnX637M74XUP0vO4YaZkv6uVHjaLqfWVkK4q8="
   }
 }
 
