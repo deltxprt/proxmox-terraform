@@ -9,6 +9,6 @@ variable "size" {
 }
 variable "ip_address" {
 }
-variable "tags" {
-  default = []
-}
+#variable "tags" {
+# default = []
+#}

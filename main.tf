@@ -90,7 +90,7 @@ module "vm_resource" {
   os          = each.value.os
   size        = each.value.size
   ip_address  = each.value.ip_address
-  tags        = each.value.tags
+#  tags        = each.value.tags
 }
 
 #output "test" {

@@ -57,9 +57,6 @@ resource "proxmox_vm_qemu" "vm-server" {
   onboot      = true
   os_type     = "cloud-init"
 
-  for_each = var.tags
-  tags     = each.value
-
   disk {
     type    = "virtio"
     storage = "vm-data"
