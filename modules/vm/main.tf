@@ -87,7 +87,7 @@ resource "dns_a_record_set" "vm_lab" {
 
 resource "dns_ptr_record" "vm_reverse_lab" {
   zone = "0.0.10.in-addr.arpa."
-  name = split(".",var.ip_address)[2]
+  name = split(".",var.ip_address)[3]
   ptr  = format("%s.lab.markaplay.net.", var.hostname)
   ttl  = 3600
 }
