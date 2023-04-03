@@ -14,32 +14,32 @@ locals {
   vm_size = {
     "small" = {
       sockets = 2
-      cores  = 1
-      memory = 1024
-      disk   = "10G"
+      cores   = 1
+      memory  = 1024
+      disk    = "10G"
     }
     "medium" = {
       sockets = 2
-      cores  = 2
-      memory = 2048
-      disk   = "20G"
+      cores   = 2
+      memory  = 2048
+      disk    = "20G"
     }
     "large" = {
       sockets = 2
-      cores  = 4
-      memory = 4096
-      disk   = "40G"
+      cores   = 4
+      memory  = 4096
+      disk    = "40G"
     }
     "xlarge" = {
       sockets = 2
-      cores  = 8
-      memory = 8192
-      disk   = "80G"
+      cores   = 8
+      memory  = 8192
+      disk    = "80G"
     }
   }
   operating_system = {
-    "debian" = { os = "debian11" }
-    "rhel"   = { os = "rhel9" }
+    "debian" = "debian11"
+    "rhel"   = "rhel9"
   }
 }
 
@@ -48,10 +48,11 @@ resource "proxmox_vm_qemu" "vm-server" {
   name        = var.hostname
   desc        = var.description
   agent       = 1
-  full_clone  = local.operating_system[var.os].os
+  full_clone  = true
+  clone       = local.operating_system[var.os]
   cpu         = "EPYC-Rome"
   numa        = true
-  sockets      = local.vm_size[var.size].sockets
+  sockets     = local.vm_size[var.size].sockets
   cores       = local.vm_size[var.size].cores
   memory      = local.vm_size[var.size].memory
   onboot      = true
@@ -79,14 +80,14 @@ resource "proxmox_vm_qemu" "vm-server" {
 
 resource "dns_a_record_set" "vm_lab" {
   zone      = "lab.markaplay.net."
-  name      = var.hostname
-  addresses = var.ip_address
+  name      = format("%s.", var.hostname)
+  addresses = [var.ip_address]
   ttl       = 3600
 }
 
 resource "dns_ptr_record" "vm_reverse_lab" {
   zone = "0.0.10.in-addr.arpa."
-  name = var.ip_address
-  ptr  = var.hostname
+  name = split(".",var.ip_address)[-1]
+  ptr  = format("%s.", var.hostname)
   ttl  = 3600
 }
