@@ -89,7 +89,7 @@ resource "azurerm_key_vault_secret" "lxcpassword" {
 }
 
 resource "vault_generic_secret" "lxclocalpassword" {
-  path = "secret/lxc/${var.hostname}"
+  path = "proxmox/${var.hostname}"
   data_json = jsonencode({
     password = random_password.lxcpassword.result
   })
