@@ -80,7 +80,7 @@ resource "proxmox_vm_qemu" "vm-server" {
 
 resource "dns_a_record_set" "vm_lab" {
   zone      = "lab.markaplay.net."
-  name      = format("%s.lab.markaplay.net.", var.hostname)
+  name      = format("%s", var.hostname)
   addresses = [var.ip_address]
   ttl       = 3600
 }
