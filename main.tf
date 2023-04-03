@@ -48,7 +48,7 @@ provider "vault" {
 }
 
 data "vault_generic_secret" "dns-key" {
-  path = "/bind-dns/ns1"
+  path = "bind-dns/ns1"
 }
 
 provider "dns" {

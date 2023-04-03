@@ -38,8 +38,8 @@ locals {
     }
   }
   operating_system = {
-    "debian" = "debian11"
-    "rhel"   = "rhel9"
+    "debian" = { os = "debian11" }
+    "rhel"   = { os = "rhel9" }
   }
 }
 
@@ -48,7 +48,7 @@ resource "proxmox_vm_qemu" "vm-server" {
   name        = var.hostname
   desc        = var.description
   agent       = 1
-  full_clone  = local.operating_system[var.os]
+  full_clone  = local.operating_system[var.os].os
   cpu         = "EPYC-Rome"
   numa        = true
   sockets      = local.vm_size[var.size].sockets
