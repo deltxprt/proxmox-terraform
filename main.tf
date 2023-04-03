@@ -54,7 +54,7 @@ data "vault_generic_secret" "dns-key" {
 provider "dns" {
   update {
     server        = "10.0.0.100"
-    key_name      = "terraform"
+    key_name      = "terraform."
     key_algorithm = "hmac-sha256"
     key_secret    = data.vault_generic_secret.dns-key.data["tsig"]
   }
