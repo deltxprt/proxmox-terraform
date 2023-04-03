@@ -97,15 +97,15 @@ resource "vault_generic_secret" "lxclocalpassword" {
 
 resource "dns_a_record_set" "lsc_lab" {
   zone      = "lab.markaplay.net."
-  name      = format("%s.", var.hostname)
+  name      = format("%s.lab.markaplay.net.", var.hostname)
   addresses = [var.ip_address]
   ttl       = 3600
 }
 
 resource "dns_ptr_record" "lxc_reverse_lab" {
   zone = "0.0.10.in-addr.arpa."
-  name = split(".",var.ip_address)[-1]
-  ptr  = format("%s.", var.hostname)
+  name = split(".",var.ip_address)[2]
+  ptr  = format("%s.lab.markaplay.net.", var.hostname)
   ttl  = 3600
 }
 
