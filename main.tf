@@ -47,15 +47,13 @@ provider "vault" {
   }
 }
 
-variable "tsig" {}
 #data.vault_generic_secret.dns-key.data["tsig"]
 provider "dns" {
   update {
-    server        = "10.0.0.100"
-    key_name      = "terraform."
+    server        = "10.0.0.111"
+    key_name      = "terraform-key."
     key_algorithm = "hmac-sha256"
-    transport     = "tcp"
-    key_secret    = var.tsig
+    key_secret    = "+KTCWpw2pT3xrczNyCAcKvfxh6UFlb9QXXowPbX0tV4="
   }
 }
 
