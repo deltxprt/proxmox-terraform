@@ -73,7 +73,7 @@ resource "proxmox_vm_qemu" "vm-server" {
   ipconfig0 = format("ip=%s/24,gw=10.0.0.1", var.ip_address)
 
   lifecycle {
-    ignore_changes = [disk]
+    ignore_changes = [disk, network]
   }
 
 }
@@ -87,7 +87,7 @@ resource "dns_a_record_set" "vm_lab" {
 
 resource "dns_ptr_record" "vm_reverse_lab" {
   zone = "0.0.10.in-addr.arpa."
-  name = split(".",var.ip_address)[3]
+  name = split(".", var.ip_address)[3]
   ptr  = format("%s.lab.markaplay.net.", var.hostname)
   ttl  = 3600
 }
