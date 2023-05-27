@@ -74,7 +74,7 @@ resource "proxmox_vm_qemu" "vm-server" {
   disk {
     type    = "virtio"
     storage = "vmpool"
-    ssd     = 1
+    format  = "qcow2"
     size    = local.vm_size[var.size].disk
   }
 
