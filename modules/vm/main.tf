@@ -40,6 +40,7 @@ locals {
   operating_system = {
     "debian" = "debian11"
     "rhel"   = "rhel9"
+    "rocky"  = "rocky9"
   }
 }
 
