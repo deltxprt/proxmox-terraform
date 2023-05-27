@@ -1,0 +1,6 @@
+hostname: "testvm"
+description: "testvm"
+os: "rocky"
+size: "xlarge"
+ip_address: "10.0.0.107"
+tags: "qemu,rocky,monitoring"
