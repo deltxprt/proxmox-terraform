@@ -29,15 +29,6 @@ terraform {
   }
 }
 
-provider "azurerm" {
-  features {
-    key_vault {
-      purge_soft_deleted_secrets_on_destroy = true
-      recover_soft_deleted_secrets          = true
-    }
-  }
-}
-
 variable "roleid" {}
 variable "secretid" {}
 
@@ -48,6 +39,27 @@ provider "vault" {
     parameters = {
       role_id   = var.roleid
       secret_id = var.secretid
+    }
+  }
+}
+
+data "vault_generic_secret" "proxmox" {
+  path = "proxmox/terraform"
+}
+
+data "vault_generic_secret" "azure" {
+  path = "proxmox/azure"
+}
+
+provider "azurerm" {
+  client_id = data.vault_generic_secret.azure.data["client_id"]
+  client_secret = data.vault_generic_secret.azure.data["client_secret"]
+  tenant_id = data.vault_generic_secret.azure.data["tenant_id"]
+  subscription_id = data.vault_generic_secret.azure.data["subscription_id"]
+  features {
+    key_vault {
+      purge_soft_deleted_secrets_on_destroy = true
+      recover_soft_deleted_secrets          = true
     }
   }
 }
@@ -66,7 +78,14 @@ provider "dns" {
   }
 }
 
-provider "proxmox" {}
+provider "proxmox" {
+    pm_api_url = data.vault_generic_secret.proxmox.data["url"]
+    pm_api_token_id    = data.vault_generic_secret.proxmox.data["user"]
+    pm_api_token_secret = data.vault_generic_secret.proxmox.data["key"]
+    pm_tls_config {
+        insecure_skip_verify = true
+    }
+}
 
 
 
