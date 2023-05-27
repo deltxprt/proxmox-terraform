@@ -82,9 +82,6 @@ provider "proxmox" {
     pm_api_url = data.vault_generic_secret.proxmox.data["url"]
     pm_api_token_id    = data.vault_generic_secret.proxmox.data["user"]
     pm_api_token_secret = data.vault_generic_secret.proxmox.data["key"]
-    pm_tls_config {
-        insecure_skip_verify = true
-    }
 }
 
 
