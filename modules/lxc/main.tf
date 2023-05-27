@@ -80,6 +80,12 @@ resource "proxmox_lxc" "lxc-servers" {
     gw     = "10.0.0.1"
   }
 
+  lifecycle {
+    ignore_changes = [
+      description,
+    ]
+  }
+
 }
 
 resource "azurerm_key_vault_secret" "lxcpassword" {
