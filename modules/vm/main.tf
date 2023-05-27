@@ -76,6 +76,7 @@ resource "proxmox_vm_qemu" "vm-server" {
     storage = "vmpool"
     format  = "qcow2"
     size    = local.vm_size[var.size].disk
+    backup  = true
   }
 
   network {
@@ -84,6 +85,8 @@ resource "proxmox_vm_qemu" "vm-server" {
     firewall = false
   }
   ipconfig0 = format("ip=%s/24,gw=10.0.0.1", var.ip_address)
+
+  tags = var.tags
 
   lifecycle {
     ignore_changes = [disk, network]
