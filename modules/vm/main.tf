@@ -50,9 +50,23 @@ locals {
     }
   }
   operating_system = {
-    "debian" = "debian11"
-    "rhel"   = "rhel9"
-    "rocky"  = "rocky9"
+    "debian" = {
+      os = "debian11"
+      type = "l26"
+    }
+
+    "rhel"   = {
+      os = "rhel9"
+      type = "l26"
+    }
+    "rocky"  = {
+      os = "rocky9"
+      type = "l26"
+    }
+    "windows" = {
+      os = "Win22"
+      type = "win11"
+    }
   }
 }
 
@@ -62,7 +76,7 @@ resource "proxmox_vm_qemu" "vm-server" {
   desc        = var.description
   agent       = 1
   full_clone  = true
-  clone       = local.operating_system[var.os]
+  clone       = local.operating_system[var.os].os
   cpu         = "host"
   numa        = true
   sockets     = local.vm_size[var.size].sockets
@@ -70,6 +84,7 @@ resource "proxmox_vm_qemu" "vm-server" {
   memory      = local.vm_size[var.size].memory
   onboot      = true
   os_type     = "cloud-init"
+  qemu_os     = local.operating_system[var.os].type
 
   disk {
     type    = "virtio"
@@ -88,7 +103,7 @@ resource "proxmox_vm_qemu" "vm-server" {
   tags = var.tags
 
   lifecycle {
-    ignore_changes = [os_type,desc,tags,network]
+    ignore_changes = [desc,tags,network]
   }
 
 }
