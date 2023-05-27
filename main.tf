@@ -1,5 +1,10 @@
 terraform {
-  backend "http" {}
+  cloud {
+    organization = "markaplay"
+    workspaces {
+      name = "proxmox-terraform"
+    }
+  }
   required_providers {
     proxmox = {
       source  = "Telmate/proxmox"
@@ -55,13 +60,15 @@ data "vault_generic_secret" "dns-key" {
 provider "dns" {
   update {
     server        = "10.0.0.111"
-    key_name      = "terraform-key."
+    key_name      = "tsig-key."
     key_algorithm = "hmac-sha256"
     key_secret    = data.vault_generic_secret.dns-key.data["tsig"]
   }
 }
 
 provider "proxmox" {}
+
+
 
 locals {
   lxc_files = fileset(".", "lxc/*.yaml")
@@ -91,7 +98,7 @@ module "vm_resource" {
   os          = each.value.os
   size        = each.value.size
   ip_address  = each.value.ip_address
-  #  tags        = each.value.tags
+  tags        = each.value.tags
 }
 
 #output "test" {

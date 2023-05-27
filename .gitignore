@@ -36,3 +36,4 @@ terraform.rc
 *.lock.hcl
 kubeconfig/*
 **/unencrypted/*
+**/.idea/*
