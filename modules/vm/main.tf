@@ -63,7 +63,7 @@ resource "proxmox_vm_qemu" "vm-server" {
   agent       = 1
   full_clone  = true
   clone       = local.operating_system[var.os]
-  cpu         = "EPYC-Rome"
+  cpu         = "host"
   numa        = true
   sockets     = local.vm_size[var.size].sockets
   cores       = local.vm_size[var.size].cores
