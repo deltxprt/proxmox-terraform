@@ -1,5 +1,5 @@
-hostname: "testvm"
-description: "testvm"
+hostname: "greylog"
+description: "greylog log server"
 os: "rocky"
 size: "xlarge"
 ip_address: "10.0.0.107"
