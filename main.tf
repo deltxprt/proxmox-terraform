@@ -29,12 +29,12 @@ terraform {
   }
 }
 
-variable "VAULT_ADDR" {}
+variable "address" {}
 variable "roleid" {}
 variable "secretid" {}
 
 provider "vault" {
-    address =
+  address = var.address
   auth_login {
     path = "auth/approle/login"
 
