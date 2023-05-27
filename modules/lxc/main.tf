@@ -2,23 +2,23 @@ terraform {
   required_providers {
     proxmox = {
       source  = "Telmate/proxmox"
-      version = "2.9.11"
+      version = "2.9.14"
     }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "3.40.0"
+      version = "3.58.0"
     }
     random = {
       source  = "hashicorp/random"
-      version = "3.4.3"
+      version = "3.5.1"
     }
     vault = {
       source  = "hashicorp/vault"
-      version = "3.14.0"
+      version = "3.15.2"
     }
     dns = {
       source  = "hashicorp/dns"
-      version = "3.2.4"
+      version = "3.3.2"
     }
   }
 }
