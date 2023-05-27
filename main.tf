@@ -89,6 +89,7 @@ module "lxc_resource" {
   start           = each.value.start
   ssh_public_keys = each.value.ssh_public_keys
   ip_address      = each.value.ip_address
+  tags = each.value.tags
 }
 module "vm_resource" {
   source      = "./modules/vm"
