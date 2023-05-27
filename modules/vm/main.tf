@@ -78,10 +78,6 @@ resource "proxmox_vm_qemu" "vm-server" {
     backup  = true
   }
 
-  smbios {
-    serial = "ds=nocloud;h=${var.hostname}"
-  }
-
   network {
     model    = "virtio"
     bridge   = "vmbr0"
