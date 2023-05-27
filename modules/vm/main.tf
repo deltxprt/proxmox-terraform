@@ -88,7 +88,7 @@ resource "proxmox_vm_qemu" "vm-server" {
   tags = var.tags
 
   lifecycle {
-    ignore_changes = [network]
+    ignore_changes = [description,tags,network]
   }
 
 }
