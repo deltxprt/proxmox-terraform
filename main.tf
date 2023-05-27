@@ -45,19 +45,15 @@ provider "vault" {
   }
 }
 
-data "vault_generic_secret" "proxmox" {
-  path = "proxmox/terraform"
-}
-
-data "vault_generic_secret" "azure" {
+data "vault_generic_secret" "azure_secrets" {
   path = "proxmox/azure"
 }
 
 provider "azurerm" {
-  client_id = data.vault_generic_secret.azure.data["client_id"]
-  client_secret = data.vault_generic_secret.azure.data["client_secret"]
-  tenant_id = data.vault_generic_secret.azure.data["tenant_id"]
-  subscription_id = data.vault_generic_secret.azure.data["subscription_id"]
+  client_id       = data.vault_generic_secret.azure_secrets.data["client_id"]
+  client_secret   = data.vault_generic_secret.azure_secrets.data["client_secret"]
+  tenant_id       = data.vault_generic_secret.azure_secrets.data["tenant_id"]
+  subscription_id = data.vault_generic_secret.azure_secrets.data["subscription_id"]
   features {
     key_vault {
       purge_soft_deleted_secrets_on_destroy = true
@@ -80,10 +76,14 @@ provider "dns" {
   }
 }
 
+data "vault_generic_secret" "proxmox_secrets" {
+  path = "proxmox/terraform"
+}
+
 provider "proxmox" {
-    pm_api_url = data.vault_generic_secret.proxmox.data["url"]
-    pm_api_token_id    = data.vault_generic_secret.proxmox.data["user"]
-    pm_api_token_secret = data.vault_generic_secret.proxmox.data["key"]
+  pm_api_url          = data.vault_generic_secret.proxmox_secrets.data["url"]
+  pm_api_token_id     = data.vault_generic_secret.proxmox_secrets.data["user"]
+  pm_api_token_secret = data.vault_generic_secret.proxmox_secrets.data["key"]
 }
 
 
@@ -107,7 +107,7 @@ module "lxc_resource" {
   start           = each.value.start
   ssh_public_keys = each.value.ssh_public_keys
   ip_address      = each.value.ip_address
-  tags = each.value.tags
+  tags            = each.value.tags
 }
 module "vm_resource" {
   source      = "./modules/vm"
