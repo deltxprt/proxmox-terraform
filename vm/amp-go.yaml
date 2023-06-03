@@ -1,0 +1,6 @@
+hostname: "go-amp"
+description: "go amp dev machine"
+os: "rocky"
+size: "small"
+ip_address: "10.0.0.123"
+tags: "qemu,rocky,app"
