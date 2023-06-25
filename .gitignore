@@ -37,3 +37,4 @@ terraform.rc
 kubeconfig/*
 **/unencrypted/*
 **/.idea/*
+**/.vscode/*
